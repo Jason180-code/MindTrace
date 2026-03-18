@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindTrace – Habit Tracker</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/habit-tracker.css">
+  <style>
+    /* Minimal modal styles for Add Habit form */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:60}
+    .modal{background:#fff;padding:20px;border-radius:8px;max-width:520px;width:94%;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+    .modal .form-group{margin-bottom:12px}
+    .modal .button-group{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+    .modal-backdrop.show{display:flex}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+  <nav class="navbar">
+    <div class="brand">
+      <a href="index.html" class="logo">
+        <span class="logo-drop" role="img" aria-label="MindTrace logo"></span>
+        <span class="logo-text">MindTrace</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="habit-tracker.html" class="active">Habit Tracker</a>
+      <a href="mood-journal.html">Mood Journal</a>
+      <a href="resources.html">Resources</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main-content" role="main">
+    <!-- Page-level status messages (used for form submission, errors, confirmations) -->
+    <div id="page-status" class="status-message" role="status" aria-live="polite" aria-atomic="true" hidden>
+      <p class="status-text"></p>
+    </div>
+  <div class="page-header">
+    <h1 class="tracking-in-expand">Habit Tracker</h1>
+    <p>Build consistency and grow healthier routines</p>
+  </div>
+
+  <!-- Reminders will appear as a simple modal popup (handled by js/reminders.js) -->
+
+  <div class="tracker-container">
+    <!-- Quick Stats removed -->
+
+    <!-- Your Habits Section -->
+    <div class="section habits-section">
+      <div class="section-header">
+        <h2>Your Habits</h2>
+        <a id="add-habit-btn" class="button-add" href="add-habit.html">+ Add New Habit</a>
+      </div>
+      <p class="description">View and track your current habits. Check them off as you complete them!</p>
+      
+      <div class="habits-list">
+        <div class="habit-card">
+          <div class="habit-info">
+            <h3>Drink Water Daily</h3>
+            <p class="habit-frequency">Daily</p>
+            <p class="habit-streak">🔥 5-day streak</p>
+          </div>
+          <button class="habit-checkbox">✓</button>
+        </div>
+        <div class="habit-card">
+          <div class="habit-info">
+            <h3>10-Minute Walk</h3>
+            <p class="habit-frequency">Daily</p>
+            <p class="habit-streak">🔥 3-day streak</p>
+          </div>
+          <button class="habit-checkbox">✓</button>
+        </div>
+        <div class="habit-card">
+          <div class="habit-info">
+            <h3>Read Before Sleep</h3>
+            <p class="habit-frequency">Daily</p>
+            <p class="habit-streak">🔥 7-day streak</p>
+          </div>
+          <button class="habit-checkbox">✓</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Habit Modal (front-end only) -->
+    <div id="habit-modal" class="modal-backdrop" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Add new habit">
+        <form id="modal-habit-form">
+          <h3>➕ Add a New Habit</h3>
+          <div class="form-group">
+            <label for="m-habit-name">Habit Name *</label>
+            <input id="m-habit-name" type="text" required placeholder="e.g., Drink 8 glasses of water">
+          </div>
+          <div class="form-group">
+            <label for="m-habit-frequency">Frequency *</label>
+            <select id="m-habit-frequency" required>
+              <option value="">Select frequency</option>
+              <option value="Daily">Daily</option>
+              <option value="3/wk">3 times a week</option>
+              <option value="2/wk">2 times a week</option>
+              <option value="1/wk">Once a week</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="m-habit-category">Category</label>
+            <select id="m-habit-category">
+              <option value="">Select (optional)</option>
+              <option value="health">Health & Fitness</option>
+              <option value="learning">Learning</option>
+              <option value="mindfulness">Mindfulness</option>
+              <option value="productivity">Productivity</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="m-habit-description">Description</label>
+            <textarea id="m-habit-description" rows="3" placeholder="Optional notes"></textarea>
+          </div>
+          <div class="button-group">
+            <button type="submit" class="button">Save</button>
+            <button type="button" id="modal-cancel" class="button secondary">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Habit Overview Section -->
+    <div class="section overview-section">
+      <h2>Strategy Tips</h2>
+      <div class="tips-grid">
+        <div class="tip-box">
+          <span class="tip-emoji">🌱</span>
+          <h3>Start Small</h3>
+          <p>Create small habits that are easy to carry on with.</p>
+        </div>
+        <div class="tip-box">
+          <span class="tip-emoji">🔗</span>
+          <h3>Habit Stacking</h3>
+          <p>Link new habits to existing routines for better success.</p>
+        </div>
+        <div class="tip-box">
+          <span class="tip-emoji">📈</span>
+          <h3>Track Progress</h3>
+          <p>Visible progress is the best motivation.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="cta-buttons">
+      <a class="button" href="habit-overview.html">📋 View Habit Overview</a>
+      <a class="button secondary" href="mood-journal.html">💭 Check Your Mood</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2026 MindTrace. All rights reserved.</p>
+</footer>
+
+<!-- Confirm delete modal (custom) -->
+<div id="confirm-modal" class="modal-backdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Confirm delete">
+    <p id="confirm-message">Are you sure you want to delete this habit?</p>
+    <div class="button-group">
+      <button id="confirm-cancel" type="button" class="button secondary">Cancel</button>
+      <button id="confirm-ok" type="button" class="button">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Undo toast -->
+<div id="undo-toast" style="display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:80;padding:12px 16px;border-radius:8px;background:#fff;box-shadow:0 8px 20px rgba(0,0,0,0.12);display:flex;gap:12px;align-items:center;">
+  <span id="undo-text">Habit deleted</span>
+  <button id="undo-btn" class="button secondary">Undo</button>
+</div>
+
+<!-- Bottom status (single-line messages) -->
+<div id="bottom-status" style="display:none;position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:79;padding:8px 12px;border-radius:8px;background:linear-gradient(90deg,#eef6ff,#f3f9ff);color:#003a66;box-shadow:0 6px 18px rgba(0,0,0,0.12);font-weight:600;font-size:14px;">
+  <span id="bottom-status-text"></span>
+</div>
+
+<script src="js/reminders.js"></script>
+
+<script>
+  (function(){
+    const STORAGE_KEY = 'mindtrace_habits_v1';
+    const modal = document.getElementById('habit-modal');
+    const openBtn = document.getElementById('add-habit-btn');
+    const cancelBtn = document.getElementById('modal-cancel');
+    const form = document.getElementById('modal-habit-form');
+    const habitsList = document.querySelector('.habits-list');
+    const pageStatus = document.getElementById('page-status');
+    const confirmModal = document.getElementById('confirm-modal');
+    const confirmCancel = document.getElementById('confirm-cancel');
+    const confirmOk = document.getElementById('confirm-ok');
+    const confirmMessage = document.getElementById('confirm-message');
+    const undoToast = document.getElementById('undo-toast');
+    const undoBtn = document.getElementById('undo-btn');
+    let pendingDelete = null;
+    let lastDeleted = null;
+    let undoTimer = null;
+
+    // ensure confirm modal and undo toast are hidden on initial load
+    if(confirmModal){ confirmModal.classList.remove('show'); confirmModal.setAttribute('aria-hidden','true'); }
+    if(undoToast){ undoToast.style.display = 'none'; }
+
+    let storedHabits = loadHabits();
+    // load completions map (habitId -> [YYYY-MM-DD])
+    let completionsMap = (function(){ try{ return JSON.parse(localStorage.getItem('mindtrace_habit_completions_v1'))||{} }catch(e){return{}} })();
+
+    function loadHabits(){
+      try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }catch(e){ return []; }
+    }
+
+    function saveHabits(){
+      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(storedHabits)); }catch(e){ console.warn('Failed to save habits', e); }
+    }
+
+    function createHabitCard(h){
+      const card = document.createElement('div');
+      card.className = 'habit-card';
+      card.dataset.habitId = h.id || '';
+      card.innerHTML = `
+        <div class="habit-info">
+          <h3>${escapeHtml(h.name)}</h3>
+          <p class="habit-frequency">${escapeHtml(h.freq)}</p>
+          <p class="habit-streak">🔥 ${Number(h.streak||0)}-day streak</p>
+        </div>
+        <div class="habit-actions">
+          <button class="habit-edit" title="Edit">✎</button>
+          <button class="habit-delete" title="Delete">🗑</button>
+          <button class="habit-checkbox" title="Mark done">✓</button>
+        </div>
+      `;
+      // mark checkbox as done if today's completion exists
+      try{
+        const today = (new Date()).toISOString().slice(0,10);
+        const arr = completionsMap[String(h.id)]||[];
+        if(arr.includes(today)){
+          const btn = card.querySelector('.habit-checkbox');
+          if(btn) btn.classList.add('done');
+        }
+      }catch(e){}
+      return card;
+    }
+
+    function renderStoredHabits(){
+      if(!habitsList || !storedHabits.length) return;
+      // render newest first
+      for(let i = storedHabits.length - 1; i >= 0; i--){
+        const h = storedHabits[i];
+        const card = createHabitCard(h);
+        habitsList.insertBefore(card, habitsList.firstChild);
+      }
+    }
+
+    let currentEditId = null;
+    function showModal(){ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); document.getElementById('m-habit-name').focus(); }
+    function hideModal(){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); form.reset(); currentEditId = null; }
+
+    // add button now links to add-habit.html — do not open modal here
+    cancelBtn && cancelBtn.addEventListener('click', function(){ hideModal(); });
+
+    form && form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('m-habit-name').value.trim();
+      const freq = document.getElementById('m-habit-frequency').value;
+      const cat = document.getElementById('m-habit-category').value;
+      if(!name || !freq) return;
+
+      if(currentEditId){
+        // update existing
+        const idx = storedHabits.findIndex(x=>String(x.id)===String(currentEditId));
+        if(idx>-1){
+          storedHabits[idx].name = name;
+          storedHabits[idx].freq = freq;
+          storedHabits[idx].category = cat;
+          saveHabits();
+          // update DOM card
+          const card = habitsList.querySelector(`[data-habit-id="${currentEditId}"]`);
+          if(card){
+            card.querySelector('h3').textContent = name;
+            card.querySelector('.habit-frequency').textContent = freq;
+          }
+          showStatus('Habit updated');
+        }
+        hideModal();
+        return;
+      }
+
+      const habitObj = { id: Date.now(), name, freq, category: cat, streak: 0 };
+      storedHabits.push(habitObj);
+      saveHabits();
+
+      const card = createHabitCard(habitObj);
+      habitsList.insertBefore(card, habitsList.firstChild);
+      showStatus('Habit saved');
+      hideModal();
+    });
+
+    // small helper to show brief status at bottom of page
+    let statusTimer = null;
+    const bottomStatus = document.getElementById('bottom-status');
+    const bottomStatusText = document.getElementById('bottom-status-text');
+    if(pageStatus) pageStatus.hidden = true; // keep top status hidden
+    function showStatus(msg){
+      if(bottomStatus && bottomStatusText){
+        bottomStatusText.textContent = msg;
+        bottomStatus.style.display = 'block';
+        if(statusTimer) clearTimeout(statusTimer);
+        statusTimer = setTimeout(()=>{ bottomStatus.style.display = 'none'; statusTimer = null; }, 2000);
+        return;
+      }
+      // fallback to pageStatus if bottomStatus missing
+      if(pageStatus){
+        pageStatus.hidden = false;
+        pageStatus.querySelector('.status-text').textContent = msg;
+        setTimeout(()=>{ pageStatus.hidden = true; }, 1800);
+      }
+    }
+
+    // simple escape to prevent accidental html injection
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    // delegate click for newly created check buttons (no persistence for check state yet)
+    document.addEventListener('click', function(e){
+      const target = e.target;
+      if(!target) return;
+      // mark done
+      if(target.classList && target.classList.contains('habit-checkbox')){
+        const card = target.closest('.habit-card');
+        if(!card) return;
+        const id = card.dataset.habitId;
+        const today = (new Date()).toISOString().slice(0,10);
+        // toggle visual
+        const isNowDone = target.classList.toggle('done');
+        try{
+          const KEY = 'mindtrace_habit_completions_v1';
+          const raw = localStorage.getItem(KEY);
+          const map = raw ? JSON.parse(raw) : {};
+          const arr = map[id]||[];
+          if(isNowDone){
+            if(!arr.includes(today)) arr.push(today);
+          } else {
+            const idx = arr.indexOf(today);
+            if(idx>-1) arr.splice(idx,1);
+          }
+          map[id]=arr;
+          map[id]=arr;
+          localStorage.setItem(KEY, JSON.stringify(map));
+          completionsMap[id]=arr;
+        }catch(e){ console.warn('save completion failed', e); }
+        return;
+      }
+      // delete (show custom confirm modal)
+      if(target.classList && target.classList.contains('habit-delete')){
+        const card = target.closest('.habit-card');
+        if(!card) return;
+        const id = card.dataset.habitId;
+        pendingDelete = { id, card };
+        const name = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
+        confirmMessage.textContent = `Delete "${name}"?`;
+        confirmModal.classList.add('show');
+        confirmModal.setAttribute('aria-hidden','false');
+        return;
+      }
+      // edit
+      if(target.classList && target.classList.contains('habit-edit')){
+        const card = target.closest('.habit-card');
+        if(!card) return;
+        const id = card.dataset.habitId;
+        const habit = storedHabits.find(h=>String(h.id)===String(id));
+        if(!habit) return;
+        // populate modal and set edit id
+        document.getElementById('m-habit-name').value = habit.name || '';
+        document.getElementById('m-habit-frequency').value = habit.freq || '';
+        document.getElementById('m-habit-category').value = habit.category || '';
+        currentEditId = id;
+        showModal();
+        return;
+      }
+    });
+
+    // confirm modal handlers
+    confirmCancel && confirmCancel.addEventListener('click', function(){
+      pendingDelete = null;
+      confirmModal.classList.remove('show');
+      confirmModal.setAttribute('aria-hidden','true');
+    });
+
+    confirmOk && confirmOk.addEventListener('click', function(){
+      if(!pendingDelete) return;
+      const { id, card } = pendingDelete;
+      // capture deleted object for undo
+      const idx = storedHabits.findIndex(h=>String(h.id)===String(id));
+      if(idx > -1){
+        lastDeleted = storedHabits.splice(idx,1)[0];
+        saveHabits();
+      } else {
+        lastDeleted = null;
+      }
+      // remove completions for this habit
+      try{ if(lastDeleted && completionsMap && completionsMap[String(lastDeleted.id)]){ delete completionsMap[String(lastDeleted.id)]; localStorage.setItem('mindtrace_habit_completions_v1', JSON.stringify(completionsMap)); } }catch(e){}
+      if(card) card.remove();
+      showStatus('Habit deleted');
+      pendingDelete = null;
+      confirmModal.classList.remove('show');
+      confirmModal.setAttribute('aria-hidden','true');
+
+      // show undo toast for a few seconds
+      if(undoTimer) clearTimeout(undoTimer);
+      if(undoToast){ undoToast.style.display = 'flex'; }
+      undoTimer = setTimeout(function(){
+        if(undoToast) undoToast.style.display = 'none';
+        lastDeleted = null;
+        undoTimer = null;
+      }, 6000);
+    });
+
+    undoBtn && undoBtn.addEventListener('click', function(){
+      if(!lastDeleted) return;
+      storedHabits.push(lastDeleted);
+      saveHabits();
+      const card = createHabitCard(lastDeleted);
+      habitsList.insertBefore(card, habitsList.firstChild);
+      if(undoToast) undoToast.style.display = 'none';
+      if(undoTimer) clearTimeout(undoTimer);
+      undoTimer = null;
+      showStatus('Restore successful');
+      lastDeleted = null;
+    });
+
+    // initial render from storage
+    renderStoredHabits();
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindTrace – Habit Overview</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/habit-overview.css">
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="brand">
+      <a href="index.html" class="logo">
+        <span class="logo-drop" role="img" aria-label="MindTrace logo"></span>
+        <span class="logo-text">MindTrace</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="habit-tracker.html" class="active">Habit Tracker</a>
+      <a href="mood-journal.html">Mood Journal</a>
+      <a href="resources.html">Resources</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1>Habit Overview</h1>
+    <p class="tracking-in-expand">Your complete habit progress and statistics</p>
+  </div>
+
+  <div class="overview-container">
+    <!-- Progress Overview -->
+    <div class="section progress-section">
+      <h2>Progress Overview</h2>
+      <div class="habit-progress-list">
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="habit-name">Drink Water Daily</span>
+            <span class="completion-rate">80%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 80%;"></div>
+          </div>
+          <p class="progress-info">24 completed out of 30 days</p>
+        </div>
+
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="habit-name">10-Minute Walk</span>
+            <span class="completion-rate">60%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 60%;"></div>
+          </div>
+          <p class="progress-info">18 completed out of 30 days</p>
+        </div>
+
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="habit-name">Read Before Sleep</span>
+            <span class="completion-rate">100%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 100%;"></div>
+          </div>
+          <p class="progress-info">30 completed out of 30 days - 🎉 Perfect!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Habit Insights -->
+    <div class="section insights-section">
+      <h2>💡 Habit Insights</h2>
+      <div class="insight-cards">
+        <div class="insight-card">
+          <div class="insight-icon">⭐</div>
+          <h3>Best Habit</h3>
+          <p>Read Before Sleep</p>
+          <span class="insight-detail">100% completion rate</span>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">🎯</div>
+          <h3>Most Consistent</h3>
+          <p>Drink Water Daily</p>
+          <span class="insight-detail">25-day average streak</span>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">📅</div>
+          <h3>Total Days Tracked</h3>
+          <p>72 days</p>
+          <span class="insight-detail">Across all habits</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Calendar View -->
+    <div class="section calendar-section">
+      <h2>📅 Weekly Overview</h2>
+      <div class="week-grid">
+        <div class="day-cell">
+          <span class="day-name">Mon</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">3/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Tue</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span>-</span>
+          </div>
+          <span class="day-complete">2/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Wed</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">3/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Thu</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span>-</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">2/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Fri</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">3/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Sat</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span>-</span>
+          </div>
+          <span class="day-complete">2/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Sun</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">3/3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="action-buttons">
+      <a class="button" href="habit-tracker.html">← Back to Habit Tracker</a>
+      <a class="button secondary" href="add-habit.html">+ Add New Habit</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2026 MindTrace. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

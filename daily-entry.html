@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Mood Entry</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="habit-tracker.html">Habit Tracker</a>
+    <a href="mood-journal.html">Mood Journal</a>
+    <a href="resources.html">Resources</a>
+    <a href="about.html">About</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Daily Mood Entry</h1>
+
+  <div class="section">
+    <label>How are you feeling today?</label><br><br>
+
+    <select id="mood-select">
+      <option>Happy</option>
+      <option>Satisfied</option>
+      <option>Exhausted</option>
+      <option>Sad</option>
+      <option>Anxious</option>
+    </select>
+
+    <br><br>
+
+    <label>Optional Notes</label><br><br>
+
+    <textarea id="mood-note" rows="4" cols="50" placeholder="Write a short reflection..."></textarea>
+
+    <br><br>
+    <button class="button" id="save-entry">Save Entry</button>
+
+  </div>
+  <script>
+    (function(){
+      const STORAGE_KEY = 'mindtrace_mood_entries_v1';
+      const map = { 'Happy':'😄', 'Satisfied':'😊', 'Exhausted':'😐', 'Sad':'😢', 'Anxious':'😥' };
+      function load(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||[] }catch(e){return[]} }
+      function save(v){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(v||[])) }catch(e){} }
+
+      const sel = document.getElementById('mood-select');
+      const note = document.getElementById('mood-note');
+      const btn = document.getElementById('save-entry');
+
+      btn.addEventListener('click', function(){
+        const label = sel.value;
+        const emoji = map[label] || '😐';
+        const ts = Date.now();
+        const date = new Date(ts).toISOString().slice(0,10);
+        const entry = { emoji, label, ts, date, note: note.value };
+
+        const arr = load();
+        const idx = arr.findIndex(x=> x && x.date === date);
+        if(idx >= 0) arr[idx] = entry; else arr.push(entry);
+        save(arr);
+        // navigate to insights which listens for storage events
+        window.location.href = 'mood-insights.html';
+      });
+    })();
+  </script>
+</main>
+
+<footer>
+  <p>&copy; 2026 MindTrace. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

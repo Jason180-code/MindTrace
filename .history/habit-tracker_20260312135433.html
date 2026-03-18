@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindTrace – Habit Tracker</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/habit-tracker.css">
+  <style>
+    /* Minimal modal styles for Add Habit form */
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:60}
+    .modal{background:#fff;padding:20px;border-radius:8px;max-width:520px;width:94%;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+    .modal .form-group{margin-bottom:12px}
+    .modal .button-group{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+    .modal-backdrop.show{display:flex}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+  <nav class="navbar">
+    <div class="brand">
+      <a href="index.html" class="logo">
+        <span class="logo-drop" role="img" aria-label="MindTrace logo"></span>
+        <span class="logo-text">MindTrace</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="habit-tracker.html" class="active">Habit Tracker</a>
+      <a href="mood-journal.html">Mood Journal</a>
+      <a href="resources.html">Resources</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+</header>
+
+<main id="main-content" role="main">
+    <!-- Page-level status messages (used for form submission, errors, confirmations) -->
+    <div id="page-status" class="status-message" role="status" aria-live="polite" aria-atomic="true" hidden>
+      <p class="status-text"></p>
+    </div>
+  <div class="page-header">
+    <h1 class="tracking-in-expand">Habit Tracker</h1>
+    <p>Build consistency and grow healthier routines</p>
+  </div>
+
+  <!-- Reminders will appear as a simple modal popup (handled by js/reminders.js) -->
+
+  <div class="tracker-container">
+    <!-- Quick Stats removed -->
+
+    <!-- Your Habits Section -->
+    <div class="section habits-section">
+      <div class="section-header">
+        <h2>Your Habits</h2>
+        <button id="add-habit-btn" class="button-add">+ Add New Habit</button>
+      </div>
+      <p class="description">View and track your current habits. Check them off as you complete them!</p>
+      
+      <div class="habits-list">
+        <div class="habit-card">
+          <div class="habit-info">
+            <h3>Drink Water Daily</h3>
+            <p class="habit-frequency">Daily</p>
+            <p class="habit-streak">🔥 5-day streak</p>
+          </div>
+          <button class="habit-checkbox">✓</button>
+        </div>
+        <div class="habit-card">
+          <div class="habit-info">
+            <h3>10-Minute Walk</h3>
+            <p class="habit-frequency">Daily</p>
+            <p class="habit-streak">🔥 3-day streak</p>
+          </div>
+          <button class="habit-checkbox">✓</button>
+        </div>
+        <div class="habit-card">
+          <div class="habit-info">
+            <h3>Read Before Sleep</h3>
+            <p class="habit-frequency">Daily</p>
+            <p class="habit-streak">🔥 7-day streak</p>
+          </div>
+          <button class="habit-checkbox">✓</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Habit Modal (front-end only) -->
+    <div id="habit-modal" class="modal-backdrop" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-label="Add new habit">
+        <form id="modal-habit-form">
+          <h3>➕ Add a New Habit</h3>
+          <div class="form-group">
+            <label for="m-habit-name">Habit Name *</label>
+            <input id="m-habit-name" type="text" required placeholder="e.g., Drink 8 glasses of water">
+          </div>
+          <div class="form-group">
+            <label for="m-habit-frequency">Frequency *</label>
+            <select id="m-habit-frequency" required>
+              <option value="">Select frequency</option>
+              <option value="Daily">Daily</option>
+              <option value="3/wk">3 times a week</option>
+              <option value="2/wk">2 times a week</option>
+              <option value="1/wk">Once a week</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="m-habit-category">Category</label>
+            <select id="m-habit-category">
+              <option value="">Select (optional)</option>
+              <option value="health">Health & Fitness</option>
+              <option value="learning">Learning</option>
+              <option value="mindfulness">Mindfulness</option>
+              <option value="productivity">Productivity</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="m-habit-description">Description</label>
+            <textarea id="m-habit-description" rows="3" placeholder="Optional notes"></textarea>
+          </div>
+          <div class="button-group">
+            <button type="submit" class="button">Save</button>
+            <button type="button" id="modal-cancel" class="button secondary">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Habit Overview Section -->
+    <div class="section overview-section">
+      <h2>Strategy Tips</h2>
+      <div class="tips-grid">
+        <div class="tip-box">
+          <span class="tip-emoji">🌱</span>
+          <h3>Start Small</h3>
+          <p>Create small habits that are easy to carry on with.</p>
+        </div>
+        <div class="tip-box">
+          <span class="tip-emoji">🔗</span>
+          <h3>Habit Stacking</h3>
+          <p>Link new habits to existing routines for better success.</p>
+        </div>
+        <div class="tip-box">
+          <span class="tip-emoji">📈</span>
+          <h3>Track Progress</h3>
+          <p>Visible progress is the best motivation.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="cta-buttons">
+      <a class="button" href="habit-overview.html">📋 View Habit Overview</a>
+      <a class="button secondary" href="mood-journal.html">💭 Check Your Mood</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2026 MindTrace. All rights reserved.</p>
+</footer>
+
+<script src="js/reminders.js"></script>
+
+<script>
+  (function(){
+    const STORAGE_KEY = 'mindtrace_habits_v1';
+    const modal = document.getElementById('habit-modal');
+    const openBtn = document.getElementById('add-habit-btn');
+    const cancelBtn = document.getElementById('modal-cancel');
+    const form = document.getElementById('modal-habit-form');
+    const habitsList = document.querySelector('.habits-list');
+    const pageStatus = document.getElementById('page-status');
+
+    let storedHabits = loadHabits();
+
+    function loadHabits(){
+      try{ return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }catch(e){ return []; }
+    }
+
+    function saveHabits(){
+      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(storedHabits)); }catch(e){ console.warn('Failed to save habits', e); }
+    }
+
+    function createHabitCard(h){
+      const card = document.createElement('div');
+      card.className = 'habit-card';
+      card.dataset.habitId = h.id || '';
+      card.innerHTML = `
+        <div class="habit-info">
+          <h3>${escapeHtml(h.name)}</h3>
+          <p class="habit-frequency">${escapeHtml(h.freq)}</p>
+          <p class="habit-streak">🔥 ${Number(h.streak||0)}-day streak</p>
+        </div>
+        <div class="habit-actions">
+          <button class="habit-edit" title="Edit">✎</button>
+          <button class="habit-delete" title="Delete">🗑</button>
+          <button class="habit-checkbox" title="Mark done">✓</button>
+        </div>
+      `;
+      return card;
+    }
+
+    function renderStoredHabits(){
+      if(!habitsList || !storedHabits.length) return;
+      // render newest first
+      for(let i = storedHabits.length - 1; i >= 0; i--){
+        const h = storedHabits[i];
+        const card = createHabitCard(h);
+        habitsList.insertBefore(card, habitsList.firstChild);
+      }
+    }
+
+    function showModal(){ modal.classList.add('show'); modal.setAttribute('aria-hidden','false'); document.getElementById('m-habit-name').focus(); }
+    function hideModal(){ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); form.reset(); }
+
+    openBtn && openBtn.addEventListener('click', function(){ showModal(); });
+    cancelBtn && cancelBtn.addEventListener('click', function(){ hideModal(); });
+
+    form && form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('m-habit-name').value.trim();
+      const freq = document.getElementById('m-habit-frequency').value;
+      const cat = document.getElementById('m-habit-category').value;
+      if(!name || !freq) return;
+
+      const habitObj = { id: Date.now(), name, freq, category: cat, streak: 0 };
+      storedHabits.push(habitObj);
+      saveHabits();
+
+      const card = createHabitCard(habitObj);
+      habitsList.insertBefore(card, habitsList.firstChild);
+      showStatus('Habit saved');
+      hideModal();
+    });
+
+    // small helper to show brief status
+    function showStatus(msg){
+      if(!pageStatus) return;
+      pageStatus.hidden = false;
+      pageStatus.querySelector('.status-text').textContent = msg;
+      setTimeout(()=>{ pageStatus.hidden = true; }, 1800);
+    }
+
+    // simple escape to prevent accidental html injection
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    // delegate click for newly created check buttons (no persistence for check state yet)
+    document.addEventListener('click', function(e){
+      if(e.target && e.target.classList.contains('habit-checkbox')){
+        e.target.classList.toggle('done');
+      }
+    });
+
+    // initial render from storage
+    renderStoredHabits();
+  })();
+</script>
+
+</body>
+</html>

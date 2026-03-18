@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindTrace – Mood Journal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/mood-journal.css">
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="brand">
+      <a href="index.html" class="logo">
+        <span class="logo-drop" role="img" aria-label="MindTrace logo"></span>
+        <span class="logo-text">MindTrace</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="habit-tracker.html">Habit Tracker</a>
+      <a href="mood-journal.html" class="active">Mood Journal</a>
+      <a href="resources.html">Resources</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1 class="tracking-in-expand">Mood Journal</h1>
+    <p>Track your emotions and discover patterns in your mental wellness</p>
+  </div>
+
+  <div class="mood-container">
+    <!-- Quick Mood Selection -->
+    <div class="section mood-quick-select">
+      <h2>How are you feeling today?</h2>
+      <div class="mood-buttons">
+        <button class="mood-btn" data-mood="😄" data-label="Happy">😄</button>
+        <button class="mood-btn" data-mood="😊" data-label="Satisfied">😊</button>
+        <button class="mood-btn" data-mood="😐" data-label="Exhausted">😐</button>
+        <button class="mood-btn" data-mood="😢" data-label="Sad">😢</button>
+        <button class="mood-btn" data-mood="😥" data-label="Anxious">😥</button>
+      </div>
+    </div>
+
+    <!-- Daily Entry Section -->
+    <div class="section entry-section">
+      <h2>📝 Daily Entry</h2>
+      <p class="section-desc">Write down your thoughts, feelings, or what happened today</p>
+      <a class="button" href="daily-entry.html">✏️ Add Daily Entry</a>
+    </div>
+
+    <!-- Recent Entries Preview -->
+    <div class="section recent-entries">
+      <h2>📋 Recent Entries</h2>
+      <div id="entries-list" class="entries-list">
+        <p class="empty">No entries yet. Start by adding your first daily entry!</p>
+      </div>
+    </div>
+
+    <!-- Mood Insights Section -->
+    <div class="section insights-section">
+      <h2>📊 Mood Insights</h2>
+      <p class="section-desc">Analyze your mood patterns and trends over time</p>
+      <a class="button secondary" href="mood-insights.html">📈 View Insights</a>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="section tips-section">
+      <h2>💡 Wellness Tips</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <span class="tip-icon">🧘</span>
+          <h3>Practice Mindfulness</h3>
+          <p>Take 5 minutes daily for meditation</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">💤</span>
+          <h3>Quality Sleep</h3>
+          <p>Aim for 7-8 hours per night</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">🏃</span>
+          <h3>Stay Active</h3>
+          <p>Regular exercise boosts mood</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+  <script>
+  // Mood button interaction and append to recent entries (front-end only)
+  (function(){
+    const STORAGE_KEY = 'mindtrace_mood_entries_v1';
+    const buttons = document.querySelectorAll('.mood-btn');
+    const entriesList = document.getElementById('entries-list');
+
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    function loadEntries(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||[] }catch(e){return[]} }
+    function saveEntries(arr){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(arr||[])) }catch(e){} }
+    function prependEntryToDOM(obj){
+      // remove empty placeholder
+      const empty = entriesList.querySelector('.empty'); if(empty) empty.remove();
+      const entry = document.createElement('div');
+      entry.className = 'entry-item';
+      entry.innerHTML = `
+        <div class="entry-head">
+          <span class="entry-mood">${escapeHtml(obj.emoji)}</span>
+          <strong class="entry-label">${escapeHtml(obj.label)}</strong>
+          <span class="entry-time">${new Date(obj.ts).toLocaleString()}</span>
+        </div>
+        <div class="entry-body"><em>${escapeHtml(obj.note||'Recorded via quick mood selector')}</em></div>
+      `;
+      entriesList.insertBefore(entry, entriesList.firstChild);
+    }
+
+    // migrate and initialize existing entries
+    let existing = loadEntries() || [];
+    // allowed mapping (keep only these emojis and normalize labels)
+    const allowed = { '😄':'Happy', '😊':'Satisfied', '😐':'Exhausted', '😢':'Sad', '😥':'Anxious' };
+    existing = existing.map(e=>{
+      if(!e || !e.emoji) return null;
+      if(!(e.emoji in allowed)) return null;
+      return Object.assign({}, e, { label: allowed[e.emoji] });
+    }).filter(Boolean);
+    // persist cleaned set
+    saveEntries(existing);
+    if(existing.length===0){ /* keep placeholder */ } else { existing.slice().reverse().forEach(e=> prependEntryToDOM(e)); }
+
+    function addEntry(moodEmoji, moodLabel){
+      const time = Date.now();
+      const iso = new Date(time).toISOString().slice(0,10);
+      const obj = { emoji: moodEmoji, label: moodLabel, ts: time, date: iso };
+      // persist
+      const arr = loadEntries(); arr.push(obj); saveEntries(arr);
+      prependEntryToDOM(obj);
+    }
+
+    buttons.forEach(btn => {
+      btn.addEventListener('click', function(){
+        buttons.forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const moodEmoji = this.getAttribute('data-mood');
+        const moodLabel = this.getAttribute('data-label');
+        addEntry(moodEmoji, moodLabel);
+      });
+    });
+  })();
+  </script>
+
+<footer>
+  <p>&copy; 2026 MindTrace. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

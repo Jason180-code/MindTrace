@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MindTrace – Tracked Habits</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/habit-tracker.css">
+  <style>
+    .tracked-container{max-width:1000px;margin:24px auto;padding:16px}
+    .entry-list .habit-card{margin-bottom:12px}
+    .empty-msg{color:#666}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="brand"><a href="index.html" class="logo"><span class="logo-drop"></span><span class="logo-text">MindTrace</span></a></div>
+      <div class="nav-links"><a href="index.html">Home</a><a href="habit-tracker.html">Habit Tracker</a><a href="mood-journal.html">Mood Journal</a><a href="about.html">About</a></div>
+    </nav>
+  </header>
+  <main class="tracked-container">
+    <h1>📚 Your Tracked Habits</h1>
+    <p class="description">This page shows habits you added (stored in your browser).</p>
+    <div id="tracked-list" class="entry-list section">
+      <p class="empty-msg">No tracked habits yet.</p>
+    </div>
+    <div style="margin-top:12px"><a class="button" href="habit-tracker.html">← Back to Habit Tracker</a></div>
+  </main>
+  <footer><p>&copy; 2026 MindTrace. All rights reserved.</p></footer>
+
+  <script>
+    (function(){
+      const STORAGE_KEY = 'mindtrace_habits_v1';
+      function getStoredHabits(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }catch(e){ return []; } }
+      function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+      const list = document.getElementById('tracked-list');
+      const items = getStoredHabits();
+      list.innerHTML = '';
+      if(items.length === 0){ list.innerHTML = '<p class="empty-msg">No tracked habits yet. Add one from the Habit Tracker.</p>'; }
+      else{
+        items.forEach(h => {
+          const div = document.createElement('div'); div.className = 'habit-card';
+          div.innerHTML = `<div class="habit-info"><h3>${escapeHtml(h.name)}</h3><p class="habit-frequency">${escapeHtml(h.frequency)}</p><p class="habit-streak">🔥 ${h.streak||0}-day streak</p><p class="habit-desc">${escapeHtml(h.description||'')}</p></div><button class="habit-checkbox">✓</button>`;
+          list.appendChild(div);
+        });
+      }
+      // allow marking done locally
+      document.addEventListener('click', function(e){ if(e.target && e.target.classList.contains('habit-checkbox')) e.target.classList.toggle('done'); });
+    })();
+  </script>
+</body>
+</html>

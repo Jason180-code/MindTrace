@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindTrace – Add Habit</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/add-habit.css">
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="brand">
+      <a href="index.html" class="logo">
+        <span class="logo-drop" role="img" aria-label="MindTrace logo"></span>
+        <span class="logo-text">MindTrace</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="habit-tracker.html" class="active">Habit Tracker</a>
+      <a href="mood-journal.html">Mood Journal</a>
+      <a href="resources.html">Resources</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1 class="tracking-in-expand">➕ Add a New Habit</h1>
+    <p>Create a new habit and start building consistency</p>
+  </div>
+
+  <div class="form-container">
+    <div class="section form-section">
+      <form class="habit-form">
+        <div class="form-group">
+          <label for="habit-name">Habit Name *</label>
+          <input 
+            type="text" 
+            id="habit-name"
+            placeholder="e.g., Drink 8 glasses of water"
+            required
+          >
+          <p class="form-hint">Be specific and actionable</p>
+        </div>
+
+        <div class="form-group">
+          <label for="habit-frequency">Frequency *</label>
+          <select id="habit-frequency" required>
+            <option value="">Select frequency</option>
+            <option value="daily">Daily</option>
+            <option value="weekly">3 times a week</option>
+            <option value="weekly-2">2 times a week</option>
+            <option value="weekly-1">Once a week</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="habit-category">Category</label>
+          <select id="habit-category">
+            <option value="">Select category (optional)</option>
+            <option value="health">🏃 Health & Fitness</option>
+            <option value="learning">📚 Learning</option>
+            <option value="mindfulness">🧘 Mindfulness</option>
+            <option value="productivity">⚡ Productivity</option>
+            <option value="sleep">💤 Sleep & Rest</option>
+            <option value="social">👥 Social</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="habit-description">Description</label>
+          <textarea 
+            id="habit-description"
+            placeholder="Add notes about this habit (optional)"
+            rows="4"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="habit-time">Ideal Time to Do It</label>
+          <input 
+            type="text" 
+            id="habit-time"
+            placeholder="e.g., Morning, After breakfast"
+          >
+        </div>
+
+        <div class="button-group">
+          <button type="submit" class="button">✓ Save Habit</button>
+          <a href="habit-tracker.html" class="button secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="section tips-section">
+      <h2>💡 Tips for Success</h2>
+      <div class="tips-list">
+        <div class="tip-item">
+          <span class="tip-icon">🎯</span>
+          <div class="tip-content">
+            <h3>Be Specific</h3>
+            <p>Instead of "exercise", try "10-minute walk after breakfast"</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <span class="tip-icon">📎</span>
+          <div class="tip-content">
+            <h3>Stack It</h3>
+            <p>Attach it to an existing habit for better success rate</p>
+          </div>
+        </div>
+        <div class="tip-item">
+          <span class="tip-icon">🌱</span>
+          <div class="tip-content">
+            <h3>Start Small</h3>
+            <p>Master a habit for 30 days before increasing difficulty</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2026 MindTrace. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
+</body>
+</html>
+<script>
+  (function(){
+    const FORM = document.querySelector('.habit-form');
+    const STORAGE_KEY = 'mindtrace_habits_v1';
+    function loadHabits(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e){ return []; } }
+    function saveHabits(h){ try { localStorage.setItem(STORAGE_KEY, JSON.stringify(h)); } catch(e){ console.warn(e); } }
+
+    FORM && FORM.addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('habit-name').value.trim();
+      const freq = document.getElementById('habit-frequency').value;
+      const category = document.getElementById('habit-category').value;
+      const description = document.getElementById('habit-description').value.trim();
+      const time = document.getElementById('habit-time').value.trim();
+      if(!name || !freq) return;
+
+      const arr = loadHabits();
+      const item = {
+        id: Date.now(),
+        name: name,
+        freq: freq,
+        category: category,
+        description: description,
+        time: time,
+        streak: 0
+      };
+      arr.push(item);
+      saveHabits(arr);
+      // go back to habit tracker where stored habits will be rendered
+      window.location.href = 'habit-tracker.html';
+    });
+  })();
+</script>

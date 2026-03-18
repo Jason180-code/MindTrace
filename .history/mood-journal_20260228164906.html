@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindTrace – Mood Journal</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/mood-journal.css">
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="brand">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🧠</span>
+        <span class="logo-text">MindTrace</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="habit-tracker.html">Habit Tracker</a>
+      <a href="mood-journal.html" class="active">Mood Journal</a>
+      <a href="resources.html">Resources</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1>💭 Mood Journal</h1>
+    <p>Track your emotions and discover patterns in your mental wellness</p>
+  </div>
+
+  <div class="mood-container">
+    <!-- Quick Mood Selection -->
+    <div class="section mood-quick-select">
+      <h2>How are you feeling today?</h2>
+      <div class="mood-buttons">
+        <button class="mood-btn" data-mood="😃" data-label="Happy">😃</button>
+        <button class="mood-btn" data-mood="😊" data-label="Good">😊</button>
+        <button class="mood-btn" data-mood="😫" data-label="ex">😫</button>
+        <button class="mood-btn" data-mood="😢" data-label="Sad">😢</button>
+        <button class="mood-btn" data-mood="😡" data-label="Mad">😡</button>
+      </div>
+    </div>
+
+    <!-- Daily Entry Section -->
+    <div class="section entry-section">
+      <h2>📝 Daily Entry</h2>
+      <p class="section-desc">Write down your thoughts, feelings, or what happened today</p>
+      <a class="button" href="daily-entry.html">✏️ Add Daily Entry</a>
+    </div>
+
+    <!-- Recent Entries Preview -->
+    <div class="section recent-entries">
+      <h2>📋 Recent Entries</h2>
+      <div class="entries-placeholder">
+        <p>No entries yet. Start by adding your first daily entry!</p>
+      </div>
+    </div>
+
+    <!-- Mood Insights Section -->
+    <div class="section insights-section">
+      <h2>📊 Mood Insights</h2>
+      <p class="section-desc">Analyze your mood patterns and trends over time</p>
+      <a class="button secondary" href="mood-insights.html">📈 View Insights</a>
+    </div>
+
+    <!-- Tips Section -->
+    <div class="section tips-section">
+      <h2>💡 Wellness Tips</h2>
+      <div class="tips-grid">
+        <div class="tip-card">
+          <span class="tip-icon">🧘</span>
+          <h3>Practice Mindfulness</h3>
+          <p>Take 5 minutes daily for meditation</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">💤</span>
+          <h3>Quality Sleep</h3>
+          <p>Aim for 7-8 hours per night</p>
+        </div>
+        <div class="tip-card">
+          <span class="tip-icon">🏃</span>
+          <h3>Stay Active</h3>
+          <p>Regular exercise boosts mood</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Mood button interaction
+  document.querySelectorAll('.mood-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const mood = this.getAttribute('data-label');
+      console.log(`Selected mood: ${mood}`);
+    });
+  });
+</script>
+
+</body>
+</html>

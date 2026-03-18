@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindTrace – Habit Overview</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/habit-overview.css">
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="brand">
+      <a href="index.html" class="logo">
+        <span class="logo-drop" role="img" aria-label="MindTrace logo"></span>
+        <span class="logo-text">MindTrace</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="habit-tracker.html" class="active">Habit Tracker</a>
+      <a href="mood-journal.html">Mood Journal</a>
+      <a href="resources.html">Resources</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1 class="tracking-in-expand">Habit Overview</h1>
+    <p>Your complete habit progress and statistics</p>
+  </div>
+
+  <div class="overview-container">
+    <!-- Progress Overview -->
+    <div class="section progress-section">
+      <h2>Progress Overview</h2>
+      <div id="habit-progress-list" class="habit-progress-list">
+        <!-- dynamically populated -->
+      </div>
+    </div>
+
+    <!-- Habit Insights -->
+    <div class="section insights-section">
+      <h2>💡 Habit Insights</h2>
+      <div class="insight-cards">
+        <div class="insight-card">
+          <div class="insight-icon">⭐</div>
+          <h3>Best Habit</h3>
+          <p>Read Before Sleep</p>
+          <span class="insight-detail">100% completion rate</span>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">🎯</div>
+          <h3>Most Consistent</h3>
+          <p>Drink Water Daily</p>
+          <span class="insight-detail">25-day average streak</span>
+        </div>
+        <div class="insight-card">
+          <div class="insight-icon">📅</div>
+          <h3>Total Days Tracked</h3>
+          <p>72 days</p>
+          <span class="insight-detail">Across all habits</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Weekly Calendar View -->
+    <div class="section calendar-section">
+      <h2>📅 Weekly Overview</h2>
+      <div class="week-grid">
+        <div class="day-cell">
+          <span class="day-name">Mon</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">3/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Tue</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span>-</span>
+          </div>
+          <span class="day-complete">2/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Wed</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">3/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Thu</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span>-</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">2/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Fri</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">3/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Sat</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span>-</span>
+          </div>
+          <span class="day-complete">2/3</span>
+        </div>
+        <div class="day-cell">
+          <span class="day-name">Sun</span>
+          <div class="checkmarks">
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+            <span class="check">✓</span>
+          </div>
+          <span class="day-complete">3/3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="action-buttons">
+      <a class="button" href="habit-tracker.html">← Back to Habit Tracker</a>
+      <a class="button secondary" href="add-habit.html">+ Add New Habit</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; 2026 MindTrace. All rights reserved.</p>
+</footer>
+
+</body>
+
+<script>
+  (function(){
+    const STORAGE_KEY = 'mindtrace_habits_v1';
+    const COMP_KEY = 'mindtrace_habit_completions_v1';
+    function loadHabits(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||[] }catch(e){return[];} }
+    function loadComps(){ try{ return JSON.parse(localStorage.getItem(COMP_KEY))||{} }catch(e){return{}} }
+
+    const habits = loadHabits();
+    const comps = loadComps();
+    const container = document.getElementById('habit-progress-list');
+    if(!container) return;
+
+    // helper: count completions in last N days
+    function countLastNDays(dates, n){
+      if(!Array.isArray(dates)) return 0;
+      const cutoff = new Date(); cutoff.setDate(cutoff.getDate()- (n-1));
+      const cutoffISO = cutoff.toISOString().slice(0,10);
+      return dates.filter(d=>d>=cutoffISO).length;
+    }
+
+    // render each habit
+    if(habits.length===0){ container.innerHTML = '<p>No habits yet. Add some to see progress here.</p>'; }
+    habits.forEach(h=>{
+      const key = String(h.id);
+      const dates = comps[key] || [];
+      const last30 = countLastNDays(dates, 30);
+      const rate = Math.round((last30/30)*100);
+      const rateText = Math.min(100, rate) + '%';
+      const infoText = `${last30} completed out of 30 days` + (last30===30 ? ' - 🎉 Perfect!' : '');
+
+      const el = document.createElement('div'); el.className='progress-item';
+      el.innerHTML = `
+        <div class="progress-header">
+          <span class="habit-name">${escapeHtml(h.name)}</span>
+          <span class="completion-rate">${rateText}</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100,rate)}%;"></div></div>
+        <p class="progress-info">${escapeHtml(infoText)}</p>
+      `;
+      container.appendChild(el);
+    });
+
+    // simple escape
+    function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  })();
+</script>
+</html>

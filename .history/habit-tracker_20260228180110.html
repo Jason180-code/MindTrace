@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MindTrace – Habit Tracker</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/habit-tracker.css">
+</head>
+<body>
+
+<header>
+  <nav class="navbar">
+    <div class="brand">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🧠</span>
+        <span class="logo-text">MindTrace</span>
+      </a>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="habit-tracker.html" class="active">Habit Tracker</a>
+      <a href="mood-journal.html">Mood Journal</a>
+      <a href="resources.html">Resources</a>
+      <a href="about.html">About</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <div class="page-header">
+    <h1>🎯 Habit Tracker</h1>
+    <p>Build consistency and watch your progress grow</p>
+  </div>
+
+  <div class="tracker-container">
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">📊</div>
+        <h3>Total Habits</h3>
+        <p class="stat-value">0</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🔥</div>
+        <h3>Best Streak</h3>
+        <p class="stat-value">0 days</p>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <h3>Completed Today</h3>
+        <p class="stat-value">0</p>
+      </div>
+    </div>
+
+    <!-- Your Habits Section -->
+    <div class="section habits-section">
+      <div class="section-header">
+        <h2>Your Habits</h2>
+        <a class="button-add" href="add-habit.html">+ Add New Habit</a>
+      </div>
+      <p class="description">View and track your current habits. Check them off as you complete them!</p>
+      
+      <div class="habits-list">
+        <div class="habit-card">
+          <div class="habit-info">
+            <h3>Drink Water Daily</h3>
+            <p class="habit-frequency">Daily</p>
+            <p class="habit-streak">🔥 5-day streak</p>
+          </div>
+          <button class="habit-checkbox">✓</button>
+        </div>
+        <div class="habit-card">
+          <div class="habit-info">
+            <h3>10-Minute Walk</h3>
+            <p class="habit-frequency">Daily</p>
+            <p class="habit-streak">🔥 3-day streak</p>
+          </div>
+          <button class="habit-checkbox">✓</button>
+        </div>
+        <div class="habit-card">
+          <div class="habit-info">
+            <h3>Read Before Sleep</h3>
+            <p class="habit-frequency">Daily</p>
+            <p class="habit-streak">🔥 7-day streak</p>
+          </div>
+          <button class="habit-checkbox">✓</button>
+        </div>
+      </div>
+
+      <div class="empty-state">
+        <p>No habits yet. Start by adding your first habit!</p>
+        <a class="button secondary" href="add-habit.html">Add Your First Habit</a>
+      </div>
+    </div>
+
+    <!-- Habit Overview Section -->
+    <div class="section overview-section">
+      <h2>Strategy Tips</h2>
+      <div class="tips-grid">
+        <div class="tip-box">
+          <span class="tip-emoji">🌱</span>
+          <h3>Start Small</h3>
+          <p>Create small habits that are easy to carry.</p>
+        </div>
+        <div class="tip-box">
+          <span class="tip-emoji">🔗</span>
+          <h3>Habit Stacking</h3>
+          <p>Link new habits to existing routines for better success.</p>
+        </div>
+        <div class="tip-box">
+          <span class="tip-emoji">📈</span>
+          <h3>Track Progress</h3>
+          <p>Visible progress is the best motivation.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Buttons -->
+    <div class="cta-buttons">
+      <a class="button" href="habit-overview.html">📋 View Habit Overview</a>
+      <a class="button secondary" href="mood-journal.html">💭 Check Your Mood</a>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

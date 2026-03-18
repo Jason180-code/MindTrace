@@ -1,0 +1,168 @@
+.page-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 20px 0;
+}
+
+.page-header h1 {
+  font-size: 44px;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+}
+
+.page-header p {
+  font-size: 16px;
+  color: #666;
+  margin: 0;
+}
+
+.mood-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+/* Mood Quick Select */
+.mood-quick-select {
+  background: linear-gradient(135deg, #f0f4ff 0%, #e8f0ff 100%);
+  border: 2px solid #dde4ff;
+}
+
+.mood-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.mood-btn {
+  width: 70px;
+  height: 70px;
+  border: 3px solid #ddd;
+  border-radius: 50%;
+  font-size: 32px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mood-btn:hover {
+  transform: scale(1.15);
+  border-color: #4f7cff;
+  box-shadow: 0 8px 16px rgba(79, 124, 255, 0.3);
+}
+
+.mood-btn.active {
+  background-color: #4f7cff;
+  border-color: #0051cc;
+  box-shadow: 0 8px 20px rgba(79, 124, 255, 0.4);
+}
+
+/* Entry Section */
+.entry-section {
+  background: white
+}
+
+.section-desc {
+  color: #666;
+  margin: 8px 0 16px 0;
+  font-size: 14px;
+}
+
+/* Recent Entries */
+.recent-entries {
+  background: linear-gradient(135deg, #f5f5f5 0%, #ececec 100%);
+}
+
+.entries-placeholder {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.entries-placeholder p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Insights Section */
+.insights-section {
+  background: white;
+}
+
+/* Tips Section */
+.tips-section {
+  grid-column: 1;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.tip-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.tip-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.tip-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.tip-card h3 {
+  font-size: 16px;
+  margin: 8px 0;
+  color: #1a1a1a;
+}
+
+.tip-card p {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+}
+
+/* Active nav link highlight */
+nav a.active {
+  color: #4f7cff;
+  border-bottom: 3px solid #4f7cff;
+  padding-bottom: 3px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 32px;
+  }
+
+  .mood-buttons {
+    gap: 12px;
+  }
+
+  .mood-btn {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .tips-grid {
+    grid-template-columns: 1fr;
+  }
+}
