@@ -1,0 +1,112 @@
+/* css/daily-entry.css */
+
+/* Reuse font variables from style.css, ensuring fallback if not loaded */
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px; /* Slightly smaller than home page for sub-pages */
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #1a1a1a;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.page-header p {
+  text-align: center;
+  color: #666;
+  margin-bottom: 32px;
+  font-size: 16px;
+}
+
+/* Entry container matching mood-journal.css layout */
+.entry-container {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* Card section style matching the main theme */
+.entry-form-section {
+  background: #ffffff;
+  padding: 32px;
+  margin-bottom: 28px;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+/* Label styling */
+.form-label {
+  display: block;
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+/* Unified modern style for selects and textareas */
+.mood-select,
+.mood-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-family: "Quicksand", sans-serif; /* Ensure inputs use main site font */
+  font-size: 15px;
+  color: #333;
+  background-color: #fff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mood-select:focus,
+.mood-textarea:focus {
+  outline: none;
+  border-color: #4f7cff; /* Use primary blue on focus */
+  box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.1);
+}
+
+/* Textarea specific styling */
+.mood-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+/* Bottom action buttons layout */
+.action-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end; /* Align buttons to the right */
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.action-buttons .button {
+  margin: 0;
+  padding: 12px 28px;
+  font-size: 15px;
+}
+
+/* Cancel button: secondary style */
+.button-cancel {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #e0e4ff; /* Pale blue-grey background */
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-family: "Quicksand", sans-serif;
+}
+
+.button-cancel:hover {
+  background-color: #c5ceff; /* Darken on hover */
+  transform: translateY(-2px);
+}
