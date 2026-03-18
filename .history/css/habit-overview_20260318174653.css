@@ -76,7 +76,7 @@
 }
 /* Ensure tiny percentages remain visible */
 .progress-bar { position: relative; }
-.progress-fill { display: block; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.03); z-index: 1; }
+.progress-fill { display: block; min-width: 6px !important; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.03); z-index: 1; }
 
 .progress-info {
   font-size: 12px;

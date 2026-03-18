@@ -1,0 +1,171 @@
+(function(){
+  document.addEventListener('DOMContentLoaded', function(){
+    const STORAGE_KEY = 'mindtrace_habits_v1';
+    const COMP_KEY = 'mindtrace_habit_completions_v1';
+    function loadHabits(){ try{ return JSON.parse(localStorage.getItem(STORAGE_KEY))||[] }catch(e){return[];} }
+    function loadComps(){ try{ return JSON.parse(localStorage.getItem(COMP_KEY))||{} }catch(e){return{}} }
+
+    const habits = loadHabits();
+    const comps = loadComps();
+    const container = document.getElementById('habit-progress-list');
+    if(!container) return;
+
+    // debug log to confirm script loaded and storage sizes
+    try{ console.debug('habit-overview loaded — habits:', habits.length, 'completions keys:', Object.keys(comps).length); }catch(e){}
+
+    // helper: count completions in last N days
+    function countLastNDays(dates, n){
+      if(!Array.isArray(dates)) return 0;
+      const cutoff = new Date(); cutoff.setDate(cutoff.getDate()- (n-1));
+      const cutoffISO = cutoff.toISOString().slice(0,10);
+      return dates.filter(d=>d>=cutoffISO).length;
+    }
+
+    // render each habit
+    if(habits.length===0){ container.innerHTML = '<p>No habits yet. Add some to see progress here.</p>'; }
+    habits.forEach(h=>{
+    const key = String(h.id);
+    const dates = comps[key] || [];
+    const last30 = countLastNDays(dates, 30);
+    const rate = Math.round((last30/30)*100);
+    const rateText = Math.min(100, rate) + '%';
+    const infoText = `${last30} completed out of 30 days` + (last30===30 ? ' - 🎉 Perfect!' : '');
+      try{ console.debug('habit', h.name, 'last30', last30, 'rate', rate); }catch(e){}
+
+    const el = document.createElement('div'); el.className='progress-item';
+    el.innerHTML = `
+      <div class="progress-header">
+        <span class="habit-name">${escapeHtml(h.name)}</span>
+        <span class="completion-rate">${rateText}</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:${Math.min(100,rate)}%;"></div></div>
+      <p class="progress-info">${escapeHtml(infoText)}</p>
+    `;
+    container.appendChild(el);
+  });
+
+  // Habit Insights: compute from completions and render cards
+  (function renderInsights(){
+    try{
+      const insightRoot = document.getElementById('insight-cards');
+      if(!insightRoot) return;
+      insightRoot.innerHTML = '';
+      if(habits.length===0){ insightRoot.innerHTML = '<p>No insights yet. Add habits and mark completions.</p>'; return; }
+
+    function getCurrentStreak(dates){
+      const set = new Set(Array.isArray(dates)?dates:[]);
+      let streak = 0;
+      const day = new Date();
+      while(true){
+        const iso = day.toISOString().slice(0,10);
+        if(set.has(iso)){ streak++; day.setDate(day.getDate()-1); } else break;
+      }
+      return streak;
+    }
+
+    const uniqueDays = new Set();
+    const stats = habits.map(h=>{
+      const arr = comps[String(h.id)]||[];
+      (arr||[]).forEach(d=> uniqueDays.add(d));
+      const last30 = countLastNDays(arr, 30);
+      const rate = Math.round((last30/30)*100);
+      const currentStreak = getCurrentStreak(arr);
+      return { id: h.id, name: h.name, last30, rate, currentStreak };
+    });
+
+    const best = stats.slice().sort((a,b)=> b.rate - a.rate || b.last30 - a.last30)[0];
+    const mostConsistent = stats.slice().sort((a,b)=> b.currentStreak - a.currentStreak || b.rate - a.rate)[0];
+    const avgRate = Math.round(stats.reduce((s,x)=>s+x.rate,0)/Math.max(1,stats.length));
+
+    const cards = [];
+    cards.push(`
+      <div class="insight-card">
+        <div class="insight-icon">⭐</div>
+        <h3>Best Habit</h3>
+        <p>${escapeHtml(best.name)}</p>
+        <span class="insight-detail">${best.rate}% completion (last 30d)</span>
+      </div>
+    `.trim());
+
+    cards.push(`
+      <div class="insight-card">
+        <div class="insight-icon">🎯</div>
+        <h3>Most Consistent</h3>
+        <p>${escapeHtml(mostConsistent.name)}</p>
+        <span class="insight-detail">${mostConsistent.currentStreak}-day current streak</span>
+      </div>
+    `.trim());
+
+    cards.push(`
+      <div class="insight-card">
+        <div class="insight-icon">📅</div>
+        <h3>Total Days Tracked</h3>
+        <p>${uniqueDays.size} days</p>
+        <span class="insight-detail">Across all habits</span>
+      </div>
+    `.trim());
+
+    cards.push(`
+      <div class="insight-card">
+        <div class="insight-icon">📊</div>
+        <h3>Average Completion</h3>
+        <p>${avgRate}%</p>
+        <span class="insight-detail">Average rate (30d)</span>
+      </div>
+    `.trim());
+
+      insightRoot.innerHTML = cards.join('');
+    }catch(err){ console.error('habit-overview: renderInsights error', err); }
+  })();
+
+  // Weekly dynamic overview: fixed Monday → Sunday for current week
+  (function renderWeek(){
+    try{
+      const grid = document.getElementById('week-grid');
+      if(!grid) return;
+      grid.innerHTML = '';
+    const today = new Date();
+    // compute Monday of current week (treat Monday as first day)
+    const dayIndex = (today.getDay() + 6) % 7; // 0 = Monday, 6 = Sunday
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - dayIndex);
+
+    const days = [];
+    for(let i=0;i<7;i++){ const d = new Date(monday); d.setDate(monday.getDate() + i); days.push(d); }
+
+    // for each day, build cell showing per-habit checks and totals
+    days.forEach(day=>{
+      const iso = day.toISOString().slice(0,10);
+      // show short weekday name (Mon, Tue, ...)
+      const dayLabel = day.toLocaleDateString(undefined, { weekday: 'short' });
+      const cell = document.createElement('div'); cell.className='day-cell';
+      const nameSpan = document.createElement('span'); nameSpan.className='day-name'; nameSpan.textContent = dayLabel;
+      const checks = document.createElement('div'); checks.className = 'checkmarks';
+      let completedCount = 0;
+      // one mark per habit
+      if(habits.length===0){ checks.innerHTML = '<span>-</span>'; }
+      habits.forEach(h=>{
+        const arr = comps[String(h.id)]||[];
+        const done = arr.includes(iso);
+        const mark = document.createElement('span');
+        mark.className = done ? 'check' : 'not-check';
+        mark.textContent = done ? '✓' : '-';
+        if(done) completedCount++;
+        checks.appendChild(mark);
+      });
+
+      const totalSpan = document.createElement('span'); totalSpan.className='day-complete'; totalSpan.textContent = habits.length>0 ? `${completedCount}/${habits.length}` : '';
+
+      cell.appendChild(nameSpan);
+      cell.appendChild(checks);
+      cell.appendChild(totalSpan);
+      grid.appendChild(cell);
+    });
+    try{ console.debug('week-grid children:', grid.children.length); }catch(e){}
+    }catch(err){ console.error('habit-overview: renderWeek error', err); }
+  })();
+
+  // simple escape
+  function escapeHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  });
+})();
