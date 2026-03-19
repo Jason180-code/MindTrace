@@ -137,13 +137,9 @@
     }
   });
 
-  if(confirmCancel) {
-    confirmCancel.addEventListener('click', function(){
-      pendingDelete = null;
-      confirmModal.classList.remove('show');
-      confirmModal.setAttribute('aria-hidden','true');
-    });
-  }
+  if(confirmCancel) confirmCancel.addEventListener('click', function(){ pendingDelete = null; confirmModal.classList.remove('show'); 
+   confirmModal.setAttribute('aria-hidden','true'); 
+  pendingDelete = null;});
 
   confirmOk && confirmOk.addEventListener('click', function(){
     if(!pendingDelete) return;
