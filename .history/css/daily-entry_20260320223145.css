@@ -6,10 +6,11 @@ h1 {
   font-size: 40px; /* Slightly smaller than home page for sub-pages */
   font-weight: 700;
   margin-bottom: 8px;
-  color: #fff;
+  color: #1a1a1a;
   letter-spacing: 0.5px;
   text-align: center;
 }
+
 
 .page-header p {
   text-align: center;
